@@ -37,10 +37,11 @@ class TypeTabCollectionViewCell: UICollectionViewCell {
         label.textColor = UIColor(named: "ActiveText")
         label.isUserInteractionEnabled = true
         
+        #warning("Отвалилился клик по табам")
         let guestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelClicked))
+        guestureRecognizer.numberOfTapsRequired = 1
         label.addGestureRecognizer(guestureRecognizer)
-        
-        
+
         return label
     }()
     
@@ -61,11 +62,13 @@ class TypeTabCollectionViewCell: UICollectionViewCell {
     
     public func configure(with configure: TypeTab) {
         labelView.text = configure.name.rawValue
+        typeTab = configure
         
         isActiveCell(checked: configure.isChecked)
     }
     
     @objc private func labelClicked() -> () {
+        print(1)
         delegate?.tabClicked(item: typeTab)
     }
     

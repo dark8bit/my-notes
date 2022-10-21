@@ -11,14 +11,12 @@ struct Notation {
     let title: String
     let description: String
     let date: Date
-    let content: String?
-    let contentType: NameType?
+    let contentType: NameType
     
-    init(title: String, description: String, date: Date, content: String? = nil, contentType: NameType? = nil) {
+    init(title: String, description: String, date: Date, contentType: NameType) {
         self.title = title
         self.description = description
         self.date = date
-        self.content = content
         self.contentType = contentType
     }
 }

@@ -12,7 +12,7 @@ class TypeView: UIView {
     private let typeView: UIView = {
         let view = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         view.layer.cornerRadius = view.frame.width / 2
-        view.backgroundColor = UIColor(named: "GreenCustom")
+        view.backgroundColor = UIColor(named: "BlueType")
         
         return view
     }()
@@ -21,7 +21,7 @@ class TypeView: UIView {
     private let typeImageView: UIImageView = {
         let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 24, height: 24))
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.image = UIImage(systemName: "bell")
+        imageView.image = UIImage(systemName: "scribble")
         imageView.tintColor = .white
         
         return imageView
@@ -36,6 +36,11 @@ class TypeView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    public func configure(contentType: ContentType) -> () {
+        typeImageView.image = UIImage(systemName: contentType.icon.rawValue)
+        typeView.backgroundColor = UIColor(named: contentType.color.rawValue)
     }
     
     private func setupViews() -> () {

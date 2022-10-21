@@ -14,6 +14,8 @@ protocol MainViewControllerDelegate: AnyObject {
 class MainViewController: UIViewController {
     public weak var delegate: MainViewControllerDelegate?
     
+    private let defaultListContent: [NameType: ContentType] = DefaultListContent
+    
     private var typeTabList: [TypeTab] = [
         TypeTab(name: .all, isChecked: true),
         TypeTab(name: .reminder, isChecked: false),
@@ -25,12 +27,18 @@ class MainViewController: UIViewController {
     private var selectedTypeTab: TypeTab = TypeTab(name: .all, isChecked: true)
     
     private let notenlyListDefault: [Notation] = [
-        Notation(title: "Hello world 1", description: "Hi World", date: Date(), contentType: .audio),
-        Notation(title: "Hello world 2", description: "Hi World", date: Date(), contentType: .reminder),
-        Notation(title: "Hello world 3", description: "Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob", date: Date(), contentType: .reminder),
-        Notation(title: "Hello world 4", description: "Hi World", date: Date(), contentType: .notifications),
-        Notation(title: "Hello world 5", description: "Hi World", date: Date(), contentType: .audio),
-        Notation(title: "Hello world 6", description: "Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob", date: Date(), contentType: .images),
+        Notation(title: "My Audio 1", description: "New Sound", date: Date(), contentType: .audio),
+        Notation(title: "Meet 1", description: "Retro", date: Date(), contentType: .notifications),
+        Notation(title: "Picture 1", description: "New image", date: Date(), contentType: .images),
+        Notation(title: "Note 1", description: "Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob", date: Date(), contentType: .reminder),
+        Notation(title: "My Audio 2", description: "New Sound", date: Date(), contentType: .audio),
+        Notation(title: "Meet 2", description: "Retro", date: Date(), contentType: .notifications),
+        Notation(title: "Picture 2", description: "New image", date: Date(), contentType: .images),
+        Notation(title: "Note 2", description: "Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob", date: Date(), contentType: .reminder),
+        Notation(title: "My Audio 3", description: "New Sound", date: Date(), contentType: .audio),
+        Notation(title: "Meet 3", description: "Retro", date: Date(), contentType: .notifications),
+        Notation(title: "Picture 3", description: "New image", date: Date(), contentType: .images),
+        Notation(title: "Note 3", description: "Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob Tum dicere exorsus est laborum et via procedat oratio quaerimus igitur, quid sit. Si sine causa? quae fuerit causa, mox videro; interea hoc tenebo, si ob", date: Date(), contentType: .reminder),
     ]
     
     private var notenlyList = [Notation]()
@@ -155,11 +163,13 @@ extension MainViewController: UISearchBarDelegate, UISearchResultsUpdating {
     }
     
     private func filteredNotenly() -> () {
-        notenlyList = selectedTypeTab.name == .all ? notenlyListDefault : notenlyListDefault.filter({ $0.contentType == selectedTypeTab.name })
+        let isAllSelected = selectedTypeTab.name == .all
+        notenlyList = isAllSelected ? notenlyListDefault : notenlyListDefault.filter({ $0.contentType == selectedTypeTab.name })
     }
     
     private func filteredNotenly(text: String) -> () {
-        notenlyList = notenlyListDefault.filter({$0.title.lowercased().contains(text.lowercased()) && $0.contentType == selectedTypeTab.name})
+        let isAllSelected = selectedTypeTab.name == .all
+        notenlyList = notenlyListDefault.filter({$0.title.lowercased().contains(text.lowercased()) && (isAllSelected ? isAllSelected : $0.contentType == selectedTypeTab.name)})
     }
 }
 
@@ -168,6 +178,7 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
     func tabClicked(item: TypeTab) -> () {
         selectedTypeTab = item
 
+        print(item)
         typeTabList = typeTabList.map({ TypeTab(name: $0.name, isChecked: $0.name == selectedTypeTab.name) })
         filteredNotenly()
         
@@ -205,10 +216,10 @@ extension MainViewController: UICollectionViewDataSource, UICollectionViewDelega
             let tabCell = typeTabList[indexPath.row]
             
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TypeTabCollectionViewCell.identifier, for: indexPath) as? TypeTabCollectionViewCell else { return UICollectionViewCell() }
-            
+
             #warning("Переписать в нормальный вид")
             cell.configure(with: tabCell)
-            cell.typeTab = tabCell
+            
             cell.delegate = self
             
             return cell

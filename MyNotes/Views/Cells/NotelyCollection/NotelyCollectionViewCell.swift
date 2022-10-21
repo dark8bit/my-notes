@@ -15,6 +15,9 @@ class NotelyCollectionViewCell: UICollectionViewCell {
             guard let notelyItem = notely else {return}
             
             infoView.configure(width: notelyItem)
+            if let content = DefaultListContent[notelyItem.contentType] {
+                typeView.configure(contentType: content)
+            }
             descriptionLabel.attributedText = NSAttributedString(string: notelyItem.description).withLineSpacing(13)
         }
     }
@@ -46,7 +49,7 @@ class NotelyCollectionViewCell: UICollectionViewCell {
     }()
     
     //MARK: TypeView
-    private let typeView: UIView = {
+    private let typeView: TypeView = {
         let view = TypeView(frame: CGRect(x: 0, y: 0, width: 40, height: 40))
         view.translatesAutoresizingMaskIntoConstraints = false
         
@@ -86,6 +89,7 @@ class NotelyCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
     
+    //MARK: Description Label
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
